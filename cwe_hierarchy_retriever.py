@@ -16,6 +16,11 @@ def get_cwes():
     base_ns = "{http://cwe.mitre.org/cwe-7}"
     cwe_tree = {}
 
+    """
+        Download the CWE XML file from https://cwe.mitre.org/data/downloads.html
+        and save it in the same directory as this script.
+        If you want to use an updated version of the CWE change the line below to the name of the file you downloaded.
+    """
     tree = ET.parse("cwec_v4.16.xml")
     root = tree.getroot()
     for main_item in root:
