@@ -7,7 +7,6 @@ from langchain_core.exceptions import OutputParserException
 from langchain.output_parsers import ResponseSchema
 from langchain.output_parsers import StructuredOutputParser
 import os
-import utils
 import json
 import openpyxl
 import re
