@@ -259,6 +259,49 @@ def compute_precision_recall(data, exact_value_only=True, just_cwe=None):
             matches = [x for x in match_values if x in cwe787_valid]
             present = [x for x in item.present if x == "CWE-787"]
             found = [x for x in item.found if x in cwe787_valid]
+        elif just_cwe == "Not Vulnerable":
+            matches = [
+                x
+                for x in match_values
+                if x
+                not in cwe022_valid
+                + cwe078_valid
+                + cwe079_valid
+                + cwe089_valid
+                + cwe125_valid
+                + cwe190_valid
+                + cwe416_valid
+                + cwe476_valid
+                + cwe787_valid
+            ]
+            present = [
+                x
+                for x in item.present
+                if x
+                not in cwe022_valid
+                + cwe078_valid
+                + cwe079_valid
+                + cwe089_valid
+                + cwe125_valid
+                + cwe190_valid
+                + cwe416_valid
+                + cwe476_valid
+                + cwe787_valid
+            ]
+            found = [
+                x
+                for x in item.found
+                if x
+                not in cwe022_valid
+                + cwe078_valid
+                + cwe079_valid
+                + cwe089_valid
+                + cwe125_valid
+                + cwe190_valid
+                + cwe416_valid
+                + cwe476_valid
+                + cwe787_valid
+            ]
         else:
             matches = match_values
             present = item.present
@@ -284,11 +327,20 @@ def compute_precision_recall(data, exact_value_only=True, just_cwe=None):
     )
 
     # compute metrics
-    precision = true_positive / (true_positive + false_positive)
-    recall = true_positive / (true_positive + false_negative)
-    accuracy = (true_positive + true_negative) / (
-        true_positive + true_negative + false_negative + false_positive
-    )
+    if true_positive + false_positive == 0:
+        precision = 0
+    else:
+        precision = true_positive / (true_positive + false_positive)
+    if true_positive + false_negative == 0:
+        recall = 0
+    else:
+        recall = true_positive / (true_positive + false_negative)
+    if true_positive + true_negative + false_negative + false_positive == 0:
+        accuracy = 0
+    else:
+        accuracy = (true_positive + true_negative) / (
+            true_positive + true_negative + false_negative + false_positive
+        )
     return precision, recall, accuracy
 
 
@@ -414,7 +466,7 @@ if __name__ == "__main__":
         )
         f1 = compute_f1(precision, recall)
         print(
-            f"EXACT MATCHES of OTHER CWEs for {files[f]}:\n\tPrecision: {precision}\n\tRecall: {recall}\n\tF1 score: {f1}"
+            f"EXACT MATCHES of Not Vulnerable CWEs for {files[f]}:\n\tPrecision: {precision}\n\tRecall: {recall}\n\tF1 score: {f1}"
         )
 
         # exact matches for All CWEs
@@ -511,7 +563,7 @@ if __name__ == "__main__":
         )
         f1 = compute_f1(precision, recall)
         print(
-            f"RELATED MATCHES of OTHER CWEs for {files[f]}:\n\tPrecision: {precision}\n\tRecall: {recall}\n\tF1 score: {f1}"
+            f"RELATED MATCHES of Not Vulnerable CWEs for {files[f]}:\n\tPrecision: {precision}\n\tRecall: {recall}\n\tF1 score: {f1}"
         )
 
         # related matches for All CWEs
